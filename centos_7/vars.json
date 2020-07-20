@@ -1,0 +1,5 @@
+{
+    "iso_checksum" : "sha256:101bc813d2af9ccf534d112cbe8670e6d900425b297d1a4d2529c5ad5f226372",
+    "iso_url"      : "http://centos.mirrors.tds.net/pub/linux/centos/7.8.2003/isos/x86_64/CentOS-7-x86_64-NetInstall-2003.iso",
+    "kickstart"    : "centos_7_new/kickstart.ks"
+}

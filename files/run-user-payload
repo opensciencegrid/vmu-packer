@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# Run job with clean environment
+/bin/env - \
+    PATH=/sbin:/usr/sbin:/bin:/usr/bin \
+    USER=root \
+    PWD=/ \
+    LANG=en_US.UTF-8 \
+    /mnt/user/run-job >> /mnt/user/run-job.log 2>&1
+
+# Shutdown
+[ -f /dont-power-off ] || /sbin/poweroff

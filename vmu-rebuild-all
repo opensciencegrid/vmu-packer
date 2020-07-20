@@ -1,0 +1,170 @@
+#!/bin/bash
+
+set -o pipefail
+set -o nounset
+
+TEMPLATES=(centos_7 centos_8 sl_7)
+
+DEPLOY_DIR=/staging/osg-images
+LOG_DIR=/var/log/vmu-packer
+
+# Comma-separated list of email address that will be notified if image creation fails.
+#ADMIN_EMAIL_LIST="blin@cs.wisc.edu,matyas+cron@cs.wisc.edu"
+ADMIN_EMAIL_LIST=matyas+cron@cs.wisc.edu
+
+
+
+
+
+prog=${0##*/}
+progdir=$(dirname "$0")
+
+
+fail () {
+    echo "$prog:" "$@" >&2
+    exit 1
+}
+
+[[ $(id -u) -eq 0 ]]  ||  fail "Please run this script as root."
+
+PATH=$progdir:$PATH
+
+mkdir -p "$LOG_DIR"
+ok=1
+ok_builds=()
+failed_builds=()
+
+
+dest_file_name () {
+    echo "$DEPLOY_DIR/${1}_x86_64_htcondor.dsk"
+}
+
+
+new_file_name () {
+    echo "$DEPLOY_DIR/new_${1}_x86_64_htcondor.dsk"
+}
+
+
+archive_name () {
+    echo "$DEPLOY_DIR/old_${1}_x86_64_htcondor.dsk${2}.gz"
+}
+
+
+log_file_name () {
+    echo "$LOG_DIR/$(basename "${1}")"
+}
+
+
+back_up_old_image () {
+    # gzip the previous image; keep the previous 2.
+    dest_file=$(dest_file_name "${1}")
+    archive_name_1=$(archive_name "${1}" .1)
+    archive_name_2=$(archive_name "${1}" .2)
+    archive_name_tmp=$(archive_name "${1}" .tmp)
+    if [[ -f $dest_file ]]; then
+        if [[ -f $archive_name_2 ]]; then
+            if ! cp -pf "$archive_name_2" "$archive_name_tmp"; then
+                return 1
+            fi
+        fi
+        if [[ -f "$archive_name_1" ]]; then
+            if ! mv -f "$archive_name_1" "$archive_name_2"; then
+                rm -f "$archive_name_tmp"
+                return 1
+            fi
+        fi
+        if gzip -nc --fast "$dest_file" > "$archive_name_1"; then
+            # Keep the old timestamp
+            touch -r "$dest_file" "$archive_name_1"
+            rm -f "$archive_name_tmp"
+            return 0
+        else
+            return 1
+        fi
+    fi
+}
+
+
+generate_image () {
+    template=$1
+    log_file=$(log_file_name "$template")
+    output_file=$(new_file_name "$template")
+
+    if ! vmu-rebuild-one "$template" "$output_file" >> "$log_file"; then
+        return 1
+    fi
+
+    chgrp osg_staff "$output_file"
+    chmod g+w "$output_file"
+
+    if ! back_up_old_image "$template"; then
+        echo "Couldn't back up old image. Leaving new image as $output_file." >> "$log_file"
+        return 1
+    fi
+
+    if ! mv -f "$output_file" "$(dest_file_name "${template}")"; then
+        echo "Couldn't move new image into place. Leaving new image as $output_file." >> "$log_file"
+        return 1
+    fi
+
+    return 0
+}
+
+# packer_cache/ gets created in current directory
+cd /var/tmp
+for template in "${TEMPLATES[@]}"; do
+    log_file=$(log_file_name "${template}")
+    printf "%s\n" "-------------------------------------------------------------------------------" >> "$log_file"
+    echo "Starting new build of $template at $(date)" >> "$log_file"
+    if generate_image "$template"; then
+        echo "Build successful at $(date)" >> "$log_file"
+        ok_builds+=("$template")
+    else
+        echo "Build failed at $(date)" >> "$log_file"
+        failed_builds+=("$template")
+        ok=0
+    fi
+    printf "%s\n" "..............................................................................." >> "$log_file"
+done
+
+
+mail=$(mktemp "$prog-mail.XXXXXX")
+trap 'rm -f "$mail"' EXIT
+
+if [[ $ok -eq 1 ]]; then
+    subject="VMU image generation: ok"
+else
+    subject="VMU image generation: ${#failed_builds[*]} images failed to build"
+fi
+
+{
+    if [[ ${#ok_builds[*]} -ne 0 ]]; then
+        echo "The following images were built successfully:"
+        echo
+        for template in "${ok_builds[@]}"; do
+            ls -l "$(dest_file_name "$template")"
+        done
+        echo
+    fi
+
+    if [[ ${#failed_builds[*]} -ne 0 ]]; then
+        echo "The following images failed to build:"
+        echo
+        for template in "${failed_builds[@]}"; do
+            echo "$template"
+        done
+        echo
+        echo "Partial log files for failed builds (see $LOG_DIR for full log files):"
+        for template in "${failed_builds[@]}"; do
+            log_file=$LOG_DIR/$(basename "$template")
+            echo
+            echo
+            echo "*** $template ***"
+            echo
+            tail -n 25 "$log_file"
+        done
+    fi
+} >> "$mail"
+
+
+/bin/mail -s "$subject" $ADMIN_EMAIL_LIST < "$mail"

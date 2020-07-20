@@ -1,0 +1,67 @@
+{
+    "variables": {
+        "disk_size"     : "6500M",
+        "disk_image"    : "image.dsk",
+        "iso_checksum"  : "",
+        "iso_url"       : "",
+        "http_directory": ".",
+        "kickstart"     : "",
+        "memory"        : "2048",
+        "output_dir"    : "/dev/shm/qemu",
+        "password"      : "CH$NG3_ME",
+        "files_path"    : "./files"
+    },
+
+
+    "sensitive-variables": ["password"],
+
+
+    "builders": [
+        {
+            "type"              : "qemu",
+
+            "accelerator"       : "kvm",
+            "boot_command"      : [
+                "<up><wait><tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{ user `kickstart` }}<enter><wait>"
+            ],
+            "boot_wait"         : "10s",
+            "disk_interface"    : "virtio",
+            "disk_size"         : "{{ user `disk_size` }}",
+            "format"            : "raw",
+            "headless"          : "true",
+            "http_directory"    : "{{ user `http_directory` }}",
+            "iso_checksum"      : "{{ user `iso_checksum` }}",
+            "iso_url"           : "{{ user `iso_url` }}",
+            "memory"            : "{{ user `memory` }}",
+            "net_device"        : "virtio-net",
+            "output_directory"  : "{{ user `output_dir` }}",
+            "shutdown_command"  : "shutdown -P now",
+            "ssh_password"      : "{{ user `password` }}",
+            "ssh_timeout"       : "30m",
+            "ssh_username"      : "root",
+            "vm_name"           : "{{ user `disk_image` }}"
+        }
+    ],
+
+
+
+    "provisioners": [
+        {
+            "type"        : "file",
+            "source"      : "{{ user `files_path` }}/",
+            "destination" : "/tmp"
+        },
+
+        {
+            "type"   : "shell",
+            "inline" : [
+                "mv /tmp/run-user-payload /root/run-user-payload",
+                "mv /tmp/osg-test.init /etc/osg-test.init",
+                "mv /tmp/osg-test.service /etc/systemd/system/osg-test.service",
+                "rm -f /dont-power-off",
+                "systemctl -q enable osg-test",
+                ":"
+            ]
+        }
+    ]
+}

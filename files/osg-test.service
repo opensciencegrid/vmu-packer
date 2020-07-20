@@ -1,0 +1,13 @@
+[Unit]
+Description=OSG Test
+ConditionPathExists=/etc/osg-test.init
+After=multi-user.target
+
+[Service]
+Type=forking
+ExecStart=/etc/osg-test.init
+TimeoutSec=0
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

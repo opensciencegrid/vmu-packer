@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# Try to set the clock correctly
+ntpdate -u ntp1.cs.wisc.edu ntp2.cs.wisc.edu ntp3.cs.wisc.edu
+
+# Mount the user image
+# No type specified; user provides their filesystem type of choice
+MOUNT_DIR=/mnt/user
+mount /dev/vdb $MOUNT_DIR
+
+# If the mount failed, we cannot run the payload, nor log why
+if [ $? -ne 0 ]; then
+    [ -f /dont-power-off ] || /sbin/poweroff
+fi
+
+# If no user executable, then we cannot run it, but we can log why
+if [ ! -f $MOUNT_DIR/run-job ]; then
+    echo "No file named '$MOUNT_DIR/run-job'." >> $MOUNT_DIR/run-job-failure.log
+    [ -f /dont-power-off ] || /sbin/poweroff
+fi
+
+# Prepare user payload to run
+chmod 0744 $MOUNT_DIR/run-job
+at -f /root/run-user-payload now + 1 minute

@@ -1,0 +1,131 @@
+#!/bin/bash
+
+
+PACKER=
+PASSWORD_FILE=/etc/vmu-packer/password.json
+DATA_DIR=/usr/share/vmu-packer
+
+
+prog=${0##*/}
+
+
+fail () {
+    echo -e "$prog:" "$@" >&2
+    exit 1
+}
+
+
+usage() {
+    cat - <<TLDR
+    Usage: $prog [options] [--] <template> <output file>
+
+    Options:
+        -d DATA_DIR      -- the directory containing packer-qemu.json, files/ and all the template directories [$DATA_DIR]
+        -p PASSWORD_FILE -- the JSON file containing the password [$PASSWORD_FILE]
+        -x PACKER        -- the path to the packer executable [look in \$PATH]
+TLDR
+}
+
+while getopts ':d:p:x:h' opt; do
+    case $opt in
+        d) DATA_DIR=$OPTARG ;;
+        p) PASSWORD_FILE=$OPTARG ;;
+        x) PACKER=$OPTARG ;;
+        h) usage; exit 0 ;;
+        *) echo "Bad option"; usage; exit 2 ;;
+    esac
+done
+
+shift $((OPTIND - 1))
+OPTIND=1
+
+if [[ $# -lt 2 ]]; then
+    echo "Insufficient arguments" 2>&1
+    usage
+    exit 2
+fi
+
+TEMPLATE=$1
+OUTPUT_FILE=$2
+
+input_dir=$DATA_DIR/$TEMPLATE
+files_path=$DATA_DIR/files
+vars=${input_dir}/vars.json
+http_directory=${input_dir}
+kickstart=kickstart.ks
+
+
+# Various checks for $DATA_DIR and $TEMPLATE
+
+assert_directory () {
+    [[ -d $1 ]] || fail "$1 not found or not a directory"
+}
+
+assert_readable_file () {
+    [[ -f $1 && -r $1 ]] || fail "$1 not found or not a readable file"
+}
+
+assert_directory "$DATA_DIR"
+assert_directory "$files_path"
+assert_readable_file "$DATA_DIR/packer-qemu.json"
+assert_directory "$input_dir"
+assert_readable_file "$vars"
+assert_readable_file "${http_directory}/${kickstart}"
+
+
+# Check for the packer binary.  The OS comes with a conflicting binary in
+# /usr/bin/packer so our RPM creates /usr/bin/packer.io instead (and optionally
+# a symlink /usr/local/bin/packer -> /usr/bin/packer.io).
+
+if [[ ! $PACKER ]]; then
+    PACKER=$(command -v packer.io 2>/dev/null) || \
+        PACKER=$(command -v packer 2>/dev/null) || \
+        { fail "packer / packer.io not found.\n" \
+               "Put Hashicorp Packer in the PATH as 'packer' or 'packer.io'\n" \
+               "or specify the full path with $prog -x /path/to/packer.io"; }
+fi
+
+owner=$(rpm -qf "$PACKER" 2>/dev/null)
+if [[ $owner = *cracklib* ]]; then
+    fail "Wrong packer -- $PACKER is the one from cracklib.\n" \
+         "Put Hashicorp Packer in the PATH as 'packer' or 'packer.io'\n" \
+         "or specify the full path with $prog -x /path/to/packer.io"
+fi
+
+
+# Check for the password file and give user instructions on how to create it.
+# TODO Add permission check.
+if [[ ! -f $PASSWORD_FILE ]]; then
+    fail "Password file not found at $PASSWORD_FILE. It should be a JSON file containing:\n"
+         '{"password":"PLAINTEXT PASSWORD"}'
+fi
+
+
+
+output_root=/dev/shm/vmu-packer-$$
+output_dir=${output_root}/output
+disk_image=new_image.dsk
+
+
+rm -rf "${output_root:?}/*"
+mkdir -p "$output_root"
+trap 'rm -rf "$output_root"' EXIT
+
+export CHECKPOINT_DISABLE=1
+export PACKER_LOG=
+
+"$PACKER" build --timestamp-ui --force \
+    --var-file "$vars" \
+    --var disk_image="$disk_image" \
+    --var files_path="$files_path" \
+    --var http_directory="$http_directory" \
+    --var kickstart="$kickstart" \
+    --var output_dir="$output_dir"  \
+    --var-file "$PASSWORD_FILE" \
+    \
+    "$DATA_DIR/packer-qemu.json"  || fail "Error creating image"
+
+mv -f "$output_dir/$disk_image" "$OUTPUT_FILE"  || { trap - EXIT; fail "Error moving output from $output_dir/$disk_image to $OUTPUT_FILE; leaving it there."; }
+
+
+# vim:et:sw=4:sts=4:ts=8

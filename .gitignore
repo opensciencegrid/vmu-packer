@@ -1,8 +1,8 @@
-# Cache objects
 packer_cache/
-
-# Crash log
+password.json
+/_build_results/
+/upstream/
+/_upstream_srpm_contents/
+/_final_srpm_contents/
+/_quilt/
 crash.log
-
-# For built boxes
-*.box
