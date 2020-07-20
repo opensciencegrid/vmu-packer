@@ -9,8 +9,7 @@ DEPLOY_DIR=/staging/osg-images
 LOG_DIR=/var/log/vmu-packer
 
 # Comma-separated list of email address that will be notified if image creation fails.
-#ADMIN_EMAIL_LIST="blin@cs.wisc.edu,matyas+cron@cs.wisc.edu"
-ADMIN_EMAIL_LIST=matyas+cron@cs.wisc.edu
+ADMIN_EMAIL_LIST="blin@cs.wisc.edu,matyas+cron@cs.wisc.edu"
 
 
 
