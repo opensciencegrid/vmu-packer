@@ -1,6 +1,7 @@
 #!/usr/bin/make -f
 NAME := vmu-packer
-VERSION := 1.0.0
+SPECFILE := rpm/$(NAME).spec
+VERSION := $(shell rpm -q --qf '%{VERSION}\n' --specfile $(SPECFILE))
 NAME_VERSION := $(NAME)-$(VERSION)
 DATADIR := /usr/share/$(NAME)
 BINDIR := /usr/bin
