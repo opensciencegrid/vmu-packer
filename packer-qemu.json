@@ -55,10 +55,10 @@
         {
             "type"   : "shell",
             "inline" : [
+                "chmod +x /tmp/run-user-payload /tmp/osg-test.init",
                 "mv /tmp/run-user-payload /root/run-user-payload",
                 "mv /tmp/osg-test.init /etc/osg-test.init",
                 "mv /tmp/osg-test.service /etc/systemd/system/osg-test.service",
-                "rm -f /dont-power-off",
                 "systemctl -q enable osg-test",
                 ":"
             ]
