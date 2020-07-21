@@ -1,4 +1,9 @@
 #!/bin/sh
+# Do some logging inside the VM; this won't get reported back but we can
+# virsh console in and cat it.
+LOGFILE=/root/osg-test.init.log
+exec 2> $LOGFILE
+set -x
 
 # Try to set the clock correctly
 ntpdate -u ntp1.cs.wisc.edu ntp2.cs.wisc.edu ntp3.cs.wisc.edu
