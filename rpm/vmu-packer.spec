@@ -31,5 +31,5 @@ echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.js
 %dir /var/log/%{name}
 
 %changelog
-* Mon Jul 20 2020 Mátyás Selmeci <matyas@cs.wisc.edu> - 1.0.0-1
+* Tue Jul 21 2020 Mátyás Selmeci <matyas@cs.wisc.edu> - 1.0.0-1
 - Initial release
