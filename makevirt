@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# TODO: This script needs arguments; for now you just have to change these constants by hand.
+
+NAME=c7test
+DISK=/staging/osg-images/centos_7_x86_64_htcondor.dsk
+TESTDISK=/dev/shm/c7test.dsk
+INPUTDISK=~/input-image-000.qcow2
+
+prog=${0##*/}
+
+fail () {
+    echo "$prog: $*" >&2
+    exit 1
+}
+
+is_true () {
+    case "${1-}" in
+        [yY]*|[tT]*|1|*true) return 0 ;;
+        [nN]*|[fF]*|0|*false) return 1 ;;
+    esac
+    return 2  # unknown
+}
+
+set -o nounset
+set -o pipefail
+IFS=$'\n\t'
+is_true "${DEBUG-}" && export PS4='${LINENO}: ' && set -x  # https://stackoverflow.com/a/17805088
+
+
+command -v virt-install &>/dev/null  ||  fail virt-install not found
+command -v virsh &>/dev/null  ||  fail virsh not found
+
+if sudo virsh list --all | grep -F $NAME; then
+    echo Shutting down
+    sudo virsh destroy $NAME
+    sudo virsh undefine $NAME
+fi
+
+
+cp -f $DISK $TESTDISK
+
+sudo virt-install  --debug  \
+    --name c7test  \
+    --connect qemu:///system  \
+    --console pty  \
+    --disk path=$TESTDISK  \
+    --graphics vnc \
+    --import  \
+    --network network=default  \
+    --os-type linux  \
+    --os-variant rhel7-unknown  \
+    --ram 2048  \
+    --vcpus 1  \
+    --virt-type kvm  \
+    \
+    --print-xml  > c7test.xml
+
+
+# Add the second disk
+
+cp -f "$INPUTDISK" /dev/shm/c7test-input.qcow2
+
+python3 <<TLDR
+import xml.etree.ElementTree as ET
+tree = ET.parse("c7test.xml")
+root = tree.getroot()
+devices = root.find("devices")
+newdisk = ET.SubElement(devices, "disk", attrib={"type": "file", "device": "disk"})
+ET.SubElement(newdisk, "driver", attrib={"name": "qemu", "type": "qcow2"})
+ET.SubElement(newdisk, "source", attrib={"file": "/dev/shm/c7test-input.qcow2"})
+ET.SubElement(newdisk, "target", attrib={"dev": "vdb", "bus": "virtio"})
+tree.write("c7test.xml")
+TLDR
+
+sudo virsh define c7test.xml
+sudo virsh start c7test
+
+# vim:et:sw=4:sts=4:ts=8
