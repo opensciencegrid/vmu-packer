@@ -1,5 +1,5 @@
 {
-    "iso_checksum" : "sha256:c87a2d81d67bbaeaf646aea5bedd70990078ec252fc52f5a7d65ff609871e255",
-    "iso_url"      : "http://centos.mirrors.tds.net/pub/linux/centos/8.2.2004/isos/x86_64/CentOS-8.2.2004-x86_64-dvd1.iso",
+    "iso_checksum" : "sha256:aaf9d4b3071c16dbbda01dfe06085e5d0fdac76df323e3bbe87cce4318052247",
+    "iso_url"      : "http://centos.mirrors.tds.net/centos/8.3.2011/isos/x86_64/CentOS-8.3.2011-x86_64-dvd1.iso",
     "kickstart"    : "centos_8_new/kickstart.ks"
 }
