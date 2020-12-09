@@ -1,6 +1,6 @@
 Summary: Scripts for using packer for making VMU images
 Name: vmu-packer
-Version: 1.0.0
+Version: 1.0.1
 Release: 1%{?dist}
 License: Apache 2.0
 Source0: %{name}-%{version}.tar.gz
@@ -31,5 +31,8 @@ echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.js
 %dir /var/log/%{name}
 
 %changelog
+* Wed Dec 09 2020 Mátyás Selmeci <matyas@cs.wisc.edu> - 1.0.1-1
+- Update to CentOS 8.3
+
 * Tue Jul 21 2020 Mátyás Selmeci <matyas@cs.wisc.edu> - 1.0.0-1
 - Initial release
