@@ -6,7 +6,7 @@ NAME_VERSION := $(NAME)-$(VERSION)
 DATADIR := /usr/share/$(NAME)
 BINDIR := /usr/bin
 ETCDIR := /etc
-TEMPLATES := centos_7 centos_8 sl_7
+TEMPLATES := centos_7 centos_8 centos_8_stream sl_7
 
 SHELL:=bash
 
