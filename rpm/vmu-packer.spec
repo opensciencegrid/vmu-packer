@@ -1,6 +1,6 @@
 Summary: Scripts for using packer for making VMU images
 Name: vmu-packer
-Version: 1.1.0
+Version: 1.1.1
 Release: 1%{?dist}
 License: Apache 2.0
 Source0: %{name}-%{version}.tar.gz
@@ -31,6 +31,9 @@ echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.js
 %dir /var/log/%{name}
 
 %changelog
+* Tue Jan 12 2021 Mátyás Selmeci <matyas@cs.wisc.edu> - 1.1.1-1
+- Build CentOS 8 Stream in vmu-rebuild-all
+
 * Fri Dec 18 2020 Mátyás Selmeci <matyas@cs.wisc.edu> - 1.1.0-1
 - Add CentOS 8 Stream
 
