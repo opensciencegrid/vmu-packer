@@ -3,7 +3,7 @@
 set -o pipefail
 set -o nounset
 
-TEMPLATES=(centos_7 centos_8 sl_7 centos_8_stream)
+TEMPLATES=(centos_7 centos_8 sl_7 centos_stream_8)
 
 DEPLOY_DIR=/staging/osg-images
 LOG_DIR=/var/log/vmu-packer
