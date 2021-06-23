@@ -1,8 +1,4 @@
 #auth --enableshadow --passalgo=sha512 --kickstart
-# For some reason libguest can't detect the default (xfs)
-# file system for CentOS 7 installs;  Overridden to use
-# ext4 - Moate
-autopart --type=lvm --fstype=ext4
 bootloader --location=mbr --timeout=1 --append="console=tty0 console=ttyS0,115200"
 cdrom
 clearpart --all --initlabel
