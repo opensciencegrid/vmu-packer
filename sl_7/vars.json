@@ -1,5 +1,5 @@
 {
-    "iso_checksum" : "sha256:56b5f079debaf01c1936b06d8a47d7145a2257df81fb9c1c89051968eef4867a",
-    "iso_url"      : "http://ftp.scientificlinux.org/linux/scientific/livecd/7/x86_64/SL-7.8-x86_64-netinst.iso",
+    "iso_checksum" : "sha256:d655e0affbcce9ff2f972bd45042ce27227f578c349f472fe92e7a96ae0529da",
+    "iso_url"      : "http://ftp.scientificlinux.org/linux/scientific/livecd/7/x86_64/SL-7.9-x86_64-netinst.iso",
     "kickstart"    : "sl_7_new/kickstart.ks"
 }
