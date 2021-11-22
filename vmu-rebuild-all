@@ -88,8 +88,10 @@ generate_image () {
     template=$1
     log_file=$(log_file_name "$template")
     output_file=$(new_file_name "$template")
+    ret=0; vmu-rebuild-one "$template" "$output_file" >> "$log_file" 2>&1 || ret=$?
 
-    if ! vmu-rebuild-one "$template" "$output_file" >> "$log_file"; then
+    if [[ $ret != 0 ]]; then
+        echo "vmu-rebuild-one \"$template\" \"$output_file\" failed with code $ret; see $log_file for details" >> "$log_file"
         return 1
     fi
 
