@@ -1,4 +1,5 @@
 #auth --enableshadow --passalgo=sha512 --kickstart
+autopart --type=lvm --fstype=ext4
 bootloader --location=mbr --timeout=1 --append="console=tty0 console=ttyS0,115200"
 cdrom
 clearpart --all --initlabel
