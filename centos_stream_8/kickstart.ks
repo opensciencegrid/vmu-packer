@@ -5,7 +5,6 @@ clearpart --all --initlabel
 eula --agreed
 firewall --disabled
 firstboot --disabled
-install
 keyboard us
 lang en_US.UTF-8
 network --bootproto dhcp
