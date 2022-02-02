@@ -1,6 +1,6 @@
 Summary: Scripts for using packer for making VMU images
 Name: vmu-packer
-Version: 1.4.1
+Version: 1.5.0
 Release: 1%{?dist}
 License: Apache 2.0
 Source0: %{name}-%{version}.tar.gz
@@ -31,6 +31,9 @@ echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.js
 %dir /var/log/%{name}
 
 %changelog
+* Tue Feb 01 2022 Mátyás Selmeci <matyas@cs.wisc.edu> - 1.5.0-1
+- Don't auto-rebuild vanilla CentOS 8 image
+
 * Thu Dec 02 2021 Mátyás Selmeci <matyas@cs.wisc.edu> - 1.4.1-1
 - Remove deprecated "install" command from EL 8 kickstart files (SOFTWARE-4906)
 - Fix image creation failure in CentOS Stream 8 and Rocky 8 due to not partitioning the disk (SOFTWARE-4913)
