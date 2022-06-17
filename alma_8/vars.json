@@ -1,0 +1,5 @@
+{
+    "iso_checksum" : "sha256:8c3bd1ff3d88b5599147626fa2616d85edcc861ec00edd6863b81dbfb135874c",
+    "iso_url"      : "http://ord.mirror.rackspace.com/almalinux/8.6/isos/x86_64/AlmaLinux-8.6-x86_64-dvd.iso",
+    "kickstart"    : "alma_8/kickstart.ks"
+}
