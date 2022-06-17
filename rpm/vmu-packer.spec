@@ -1,6 +1,6 @@
 Summary: Scripts for using packer for making VMU images
 Name: vmu-packer
-Version: 1.5.0
+Version: 1.6.0
 Release: 1%{?dist}
 License: Apache 2.0
 Source0: %{name}-%{version}.tar.gz
@@ -31,6 +31,9 @@ echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.js
 %dir /var/log/%{name}
 
 %changelog
+* Fri Jun 17 2022 Mátyás Selmeci <matyas@cs.wisc.edu> - 1.6.0-1
+- Add Alma Linux 8.6 (SOFTWARE-5177)
+
 * Tue Feb 01 2022 Mátyás Selmeci <matyas@cs.wisc.edu> - 1.5.0-1
 - Don't auto-rebuild vanilla CentOS 8 image
 
