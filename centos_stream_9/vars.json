@@ -1,0 +1,5 @@
+{
+    "iso_checksum" : "sha256:7791a00219db42d93c93303955ac6dd6204a6fbb86465eace0e091f9d817cdbf",
+    "iso_url"      : "https://mirror.grid.uchicago.edu/pub/linux/centos-stream/9-stream/BaseOS/x86_64/iso/CentOS-Stream-9-20221129.1-x86_64-dvd1.iso",
+    "kickstart"    : "centos_stream_9/kickstart.ks"
+}

@@ -1,0 +1,5 @@
+{
+    "iso_checksum" : "sha256:69fa71d69a07c9d204da81767719a2af183d113bc87ee5f533f98a194a5a1f8a",
+    "iso_url"      : "https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.1-x86_64-dvd.iso",
+    "kickstart"    : "rocky_9/kickstart.ks"
+}
