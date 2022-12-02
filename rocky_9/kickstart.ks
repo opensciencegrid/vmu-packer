@@ -35,7 +35,7 @@ tar
 %post --log=/root/ks.log
 yum -y config-manager --enable extras
 yum -y config-manager --enable powertools
-yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 yum -y distro-sync
 date > /etc/creation_date
 mkdir /mnt/user
