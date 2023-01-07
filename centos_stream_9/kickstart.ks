@@ -22,10 +22,10 @@ selinux --permissive
 services --enabled=NetworkManager,sshd
 skipx
 text
-timezone --isUtc --ntpservers ntp1.cs.wisc.edu,ntp2.cs.wisc.edu,ntp3.cs.wisc.edu America/Chicago
+timezone --utc --ntpservers ntp1.cs.wisc.edu,ntp2.cs.wisc.edu,ntp3.cs.wisc.edu America/Chicago
 zerombr
 
-%packages --instLangs=en_US.utf8 --excludedocs
+%packages --inst-langs=en_US.utf8 --excludedocs
 @core
 at
 bzip2

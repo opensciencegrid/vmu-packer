@@ -23,7 +23,7 @@
 
             "accelerator"       : "kvm",
             "boot_command"      : [
-                "<up><wait><tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{ user `kickstart` }}<enter><wait>"
+                "<up><wait><tab> text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{ user `kickstart` }}<enter><wait>"
             ],
             "boot_wait"         : "10s",
             "disk_interface"    : "virtio",
