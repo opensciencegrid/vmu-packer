@@ -1,6 +1,6 @@
 Summary: Scripts for using packer for making VMU images
 Name: vmu-packer
-Version: 1.7.0
+Version: 1.7.1
 Release: 1%{?dist}
 License: Apache 2.0
 Source0: %{name}-%{version}.tar.gz
@@ -31,6 +31,9 @@ echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.js
 %dir /var/log/%{name}
 
 %changelog
+* Mon Jan 09 2023 Carl Edquist <edquist@cs.wisc.edu> - 1.7.1-1
+- EL9 packer fixes (SOFTWARE-5337)
+
 * Fri Dec 02 2022 Carl Edquist <edquist@cs.wisc.edu> - 1.7.0-1
 - Add EL9 images (SOFTWARE-5337)
   - Alma 9.1
