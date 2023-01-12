@@ -37,7 +37,7 @@
             "net_device"        : "virtio-net",
             "output_directory"  : "{{ user `output_dir` }}",
             "qemuargs"          : [
-                "-cpu", "{{ user `cpu` }}"
+                ["-cpu", "{{ user `cpu` }}"]
             ],
             "shutdown_command"  : "shutdown -P now",
             "ssh_password"      : "{{ user `password` }}",

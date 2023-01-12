@@ -42,4 +42,6 @@ yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarc
 yum -y distro-sync
 date > /etc/creation_date
 mkdir /mnt/user
+echo >> /etc/ssh/sshd_config
+echo PermitRootLogin yes >> /etc/ssh/sshd_config
 %end
