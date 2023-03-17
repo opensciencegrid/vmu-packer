@@ -1,5 +1,5 @@
 {
-    "iso_checksum" : "sha256:8c3bd1ff3d88b5599147626fa2616d85edcc861ec00edd6863b81dbfb135874c",
-    "iso_url"      : "http://ord.mirror.rackspace.com/almalinux/8.6/isos/x86_64/AlmaLinux-8.6-x86_64-dvd.iso",
+    "iso_checksum" : "sha256:b95ddf9d56a849cc8eb4b95dd2321c13af637d3379b91f5d96c39e96fb4403b3",
+    "iso_url"      : "http://mirror.grid.uchicago.edu/pub/linux/alma/8.7/isos/x86_64/AlmaLinux-8.7-x86_64-dvd.iso",
     "kickstart"    : "alma_8/kickstart.ks"
 }
