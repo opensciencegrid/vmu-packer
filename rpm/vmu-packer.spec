@@ -1,6 +1,6 @@
 Summary: Scripts for using packer for making VMU images
 Name: vmu-packer
-Version: 1.7.3
+Version: 1.8.0
 Release: 1%{?dist}
 License: Apache 2.0
 Source0: %{name}-%{version}.tar.gz
@@ -31,6 +31,10 @@ echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.js
 %dir /var/log/%{name}
 
 %changelog
+* Fri Mar 17 2023 Mátyás Selmeci <matyas@cs.wisc.edu> - 1.8.0-1
+- Use Rocky 8.7 ISO for Rocky 8 (SOFTWARE-5239)
+- Use Alma 8.7 ISO for Alma 8
+
 * Tue Feb 14 2023 Carl Edquist <edquist@cs.wisc.edu> - 1.7.3-1
 - Use CRB repo for EL9 (SOFTWARE-5487)
 
