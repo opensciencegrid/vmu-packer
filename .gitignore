@@ -6,3 +6,4 @@ password.json
 /_final_srpm_contents/
 /_quilt/
 crash.log
+*.iso
