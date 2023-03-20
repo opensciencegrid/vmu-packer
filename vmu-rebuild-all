@@ -10,6 +10,9 @@ DEPLOY_DIR=/staging/osg-images
 LOG_DIR=/var/log/vmu-packer
 PACKER_CACHE_PARENT=/staging/osg-images/working
 
+TIMEOUT=7200  # should be greater than vmu-rebuild-one's TIMEOUT+KILL_TIMEOUT
+KILL_TIMEOUT=300
+
 # Comma-separated list of email address that will be notified if image creation fails.
 ADMIN_EMAIL_LIST="blin@cs.wisc.edu,matyas+cron@cs.wisc.edu"
 
@@ -90,12 +93,14 @@ generate_image () {
     template=$1
     log_file=$(log_file_name "$template")
     output_file=$(new_file_name "$template")
-    ret=0; vmu-rebuild-one "$template" "$output_file" >> "$log_file" 2>&1 || ret=$?
+    [[ -t 1 ]] && echo "Starting vmu-rebuild-one $template at $(date); logs at $log_file"
+    ret=0; timeout -k "$KILL_TIMEOUT" "$TIMEOUT" vmu-rebuild-one "$template" "$output_file" >> "$log_file" 2>&1 || ret=$?
 
     if [[ $ret != 0 ]]; then
-        echo "vmu-rebuild-one \"$template\" \"$output_file\" failed with code $ret; see $log_file for details" >> "$log_file"
+        echo "vmu-rebuild-one \"$template\" \"$output_file\" failed with code $ret" >> "$log_file"
         return 1
     fi
+    [[ -t 1 ]] && echo "$output_file built at $(date)"
 
     chgrp osg_staff "$output_file"
     chmod g+w "$output_file"
@@ -109,6 +114,8 @@ generate_image () {
         echo "Couldn't move new image into place. Leaving new image as $output_file." >> "$log_file"
         return 1
     fi
+    
+    [[ -t 1 ]] && echo "Moving files around succeeded at $(date)"
 
     return 0
 }

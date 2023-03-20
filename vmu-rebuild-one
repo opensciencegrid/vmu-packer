@@ -5,6 +5,8 @@ PACKER=
 PASSWORD_FILE=/etc/vmu-packer/password.json
 DATA_DIR=/usr/share/vmu-packer
 
+TIMEOUT=6800
+KILL_TIMEOUT=300
 
 prog=${0##*/}
 
@@ -114,7 +116,8 @@ trap 'rm -rf "$output_root"' EXIT
 export CHECKPOINT_DISABLE=1
 export PACKER_LOG=
 
-"$PACKER" build --timestamp-ui --force \
+timeout -k "$KILL_TIMEOUT" "$TIMEOUT" \
+    "$PACKER" build --timestamp-ui --force \
     --var-file "$vars" \
     --var disk_image="$disk_image" \
     --var files_path="$files_path" \
