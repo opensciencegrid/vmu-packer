@@ -39,6 +39,11 @@ ok_builds=()
 failed_builds=()
 
 
+logdate () {
+    date '+%F %T' "$@"
+}
+
+
 dest_file_name () {
     echo "$DEPLOY_DIR/${1}_x86_64_htcondor.dsk"
 }
@@ -93,14 +98,14 @@ generate_image () {
     template=$1
     log_file=$(log_file_name "$template")
     output_file=$(new_file_name "$template")
-    [[ -t 1 ]] && echo "Starting vmu-rebuild-one $template at $(date); logs at $log_file"
+    [[ -t 1 ]] && echo "$(logdate): Starting vmu-rebuild-one $template; logs at $log_file"
     ret=0; timeout -k "$KILL_TIMEOUT" "$TIMEOUT" vmu-rebuild-one "$template" "$output_file" >> "$log_file" 2>&1 || ret=$?
 
     if [[ $ret != 0 ]]; then
         echo "vmu-rebuild-one \"$template\" \"$output_file\" failed with code $ret" >> "$log_file"
         return 1
     fi
-    [[ -t 1 ]] && echo "$output_file built at $(date)"
+    [[ -t 1 ]] && echo "$(logdate): $output_file built"
 
     chgrp osg_staff "$output_file"
     chmod g+w "$output_file"
@@ -115,7 +120,7 @@ generate_image () {
         return 1
     fi
     
-    [[ -t 1 ]] && echo "Moving files around succeeded at $(date)"
+    [[ -t 1 ]] && echo "$(logdate): Moving files around succeeded"
 
     return 0
 }
@@ -125,12 +130,12 @@ cd "$PACKER_CACHE_PARENT" || fail "Couldn't cd into $PACKER_CACHE_PARENT"
 for template in "${TEMPLATES[@]}"; do
     log_file=$(log_file_name "${template}")
     printf "%s\n" "-------------------------------------------------------------------------------" >> "$log_file"
-    echo "Starting new build of $template at $(date)" >> "$log_file"
+    echo "Starting new build of $template at $(logdate)" >> "$log_file"
     if generate_image "$template"; then
-        echo "Build successful at $(date)" >> "$log_file"
+        echo "Build successful at $(logdate)" >> "$log_file"
         ok_builds+=("$template")
     else
-        echo "Build failed at $(date)" >> "$log_file"
+        echo "Build failed at $(logdate)" >> "$log_file"
         failed_builds+=("$template")
         ok=0
     fi
