@@ -190,6 +190,7 @@ fi
             echo
             tail -n 25 "$log_file"
         done
+        echo
     fi
 } >> "$mail"
 
