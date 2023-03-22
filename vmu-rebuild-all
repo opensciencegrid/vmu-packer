@@ -44,6 +44,13 @@ logdate () {
 }
 
 
+iecho () {
+    if [[ -t 1 ]]; then
+        echo "$(logdate): $*"
+    fi
+}
+
+
 dest_file_name () {
     echo "$DEPLOY_DIR/${1}_x86_64_htcondor.dsk"
 }
@@ -98,29 +105,34 @@ generate_image () {
     template=$1
     log_file=$(log_file_name "$template")
     output_file=$(new_file_name "$template")
-    [[ -t 1 ]] && echo "$(logdate): Starting vmu-rebuild-one $template; logs at $log_file"
+
+    iecho ""
+    iecho "Starting vmu-rebuild-one $template; logs at $log_file"
     ret=0; timeout -k "$KILL_TIMEOUT" "$TIMEOUT" vmu-rebuild-one "$template" "$output_file" >> "$log_file" 2>&1 || ret=$?
 
     if [[ $ret != 0 ]]; then
+        iecho "vmu-rebuild-one failed with code $ret, see logs for details"
         echo "vmu-rebuild-one \"$template\" \"$output_file\" failed with code $ret" >> "$log_file"
         return 1
     fi
-    [[ -t 1 ]] && echo "$(logdate): $output_file built"
+    iecho "$output_file built"
 
     chgrp osg_staff "$output_file"
     chmod g+w "$output_file"
 
     if ! back_up_old_image "$template"; then
+        iecho "Couldn't back up old image"
         echo "Couldn't back up old image. Leaving new image as $output_file." >> "$log_file"
         return 1
     fi
 
     if ! mv -f "$output_file" "$(dest_file_name "${template}")"; then
+        iecho "Couldn't move new image into place"
         echo "Couldn't move new image into place. Leaving new image as $output_file." >> "$log_file"
         return 1
     fi
     
-    [[ -t 1 ]] && echo "$(logdate): Moving files around succeeded"
+    iecho "Moving files around succeeded"
 
     return 0
 }
