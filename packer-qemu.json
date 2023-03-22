@@ -41,7 +41,7 @@
             ],
             "shutdown_command"  : "shutdown -P now",
             "ssh_password"      : "{{ user `password` }}",
-            "ssh_timeout"       : "30m",
+            "ssh_timeout"       : "40m",
             "ssh_username"      : "root",
             "vm_name"           : "{{ user `disk_image` }}"
         }
