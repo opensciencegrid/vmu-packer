@@ -1,6 +1,6 @@
 Summary: Scripts for using packer for making VMU images
 Name: vmu-packer
-Version: 1.10.0
+Version: 1.10.1
 Release: 1%{?dist}
 License: Apache 2.0
 Source0: %{name}-%{version}.tar.gz
@@ -31,6 +31,9 @@ echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.js
 %dir /var/log/%{name}
 
 %changelog
+* Mon Mar 27 2023 Mátyás Selmeci <matyas@cs.wisc.edu> - 1.10.1-1
+- Fix typo in CentOS Stream 9 json and don't mail a log file with escape sequences
+
 * Wed Mar 22 2023 Mátyás Selmeci <matyas@cs.wisc.edu> - 1.10.0-1
 - Update CentOS Stream 9 ISO to 2023-03-21
 
