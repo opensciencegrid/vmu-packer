@@ -188,7 +188,7 @@ fi
             echo
             echo "*** $template ***"
             echo
-            tail -n 25 "$log_file" | sed -re 's/\033\[[0-9;]+m//g'  # delete terminal escape sequences
+            tail -n 25 "$log_file" | sed -re 's/\x1b\[[0-9;]+m//g'  # delete terminal escape sequences
         done
         echo
     fi
