@@ -117,7 +117,7 @@ export CHECKPOINT_DISABLE=1
 export PACKER_LOG=
 
 timeout -k "$KILL_TIMEOUT" "$TIMEOUT" \
-    "$PACKER" build --timestamp-ui --force \
+    "$PACKER" build -machine-readable --timestamp-ui --force \
     --var-file "$vars" \
     --var disk_image="$disk_image" \
     --var files_path="$files_path" \
@@ -128,7 +128,9 @@ timeout -k "$KILL_TIMEOUT" "$TIMEOUT" \
     \
     "$DATA_DIR/packer-qemu.json"  || fail "Error creating image -- $PACKER exited with error code $?"
 
-mv -f "$output_dir/$disk_image" "$OUTPUT_FILE"  || { trap - EXIT; fail "Error moving output from $output_dir/$disk_image to $OUTPUT_FILE; leaving it there."; }
+timeout -k "$KILL_TIMEOUT" "$TIMEOUT" \
+    qemu-img convert -c -O qcow2 "$output_dir/$disk_image" "$OUTPUT_FILE" || \
+    { trap - EXIT; fail "Error moving output from $output_dir/$disk_image to $OUTPUT_FILE; leaving it there."; }
 
 
 # vim:et:sw=4:sts=4:ts=8
