@@ -1,0 +1,7 @@
+{
+    "cpu"          : "host",
+    "disk_size"    : "10000M",
+    "iso_checksum" : "sha256:00c91b923997c44822595998deb0cebcfaa53e93c2bed8745b04516badff431f",
+    "iso_url"      : "http://ord.mirror.rackspace.com/almalinux/9.2/isos/x86_64/AlmaLinux-9.2-x86_64-dvd.iso",
+    "kickstart"    : "gh_runner/kickstart.ks"
+}
