@@ -1,7 +1,7 @@
 {
     "cpu"          : "host",
     "disk_size"    : "10000M",
-    "iso_checksum" : "sha256:e16bc20fe7bfb6c768e2492842a5ec8b183ade5ee0dc41aaa5692a516e1e9cb7",
-    "iso_url"      : "https://mirror.grid.uchicago.edu/pub/linux/centos-stream/9-stream/BaseOS/x86_64/iso/CentOS-Stream-9-20230912.0-x86_64-dvd1.iso",
+    "iso_checksum" : "sha256:313e952950cd137aafc4fc954c5ea3edc8ac6f2cf5cc7dcc1cbc3f1c21152fed",
+    "iso_url"      : "https://mirror.grid.uchicago.edu/pub/linux/centos-stream/9-stream/BaseOS/x86_64/iso/CentOS-Stream-9-20231009.1-x86_64-dvd1.iso",
     "kickstart"    : "centos_stream_9/kickstart.ks"
 }
