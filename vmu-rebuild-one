@@ -117,7 +117,7 @@ export CHECKPOINT_DISABLE=1
 export PACKER_LOG=
 
 timeout -k "$KILL_TIMEOUT" "$TIMEOUT" \
-    "$PACKER" build --timestamp-ui --force \
+    "$PACKER" build --machine-readable --timestamp-ui --force \
     --var-file "$vars" \
     --var disk_image="$disk_image" \
     --var files_path="$files_path" \
