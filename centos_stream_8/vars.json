@@ -1,5 +1,0 @@
-{
-    "iso_checksum" : "sha256:1a2d95bd8792843ca0d653619390c84eb235f853765dfee096464d9edbee76a1",
-    "iso_url"      : "http://centos.mirrors.tds.net/centos/8-stream/isos/x86_64/CentOS-Stream-8-x86_64-20210728-dvd1.iso",
-    "kickstart"    : "centos_stream_8/kickstart.ks"
-}

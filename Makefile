@@ -6,8 +6,8 @@ NAME_VERSION := $(NAME)-$(VERSION)
 DATADIR := /usr/share/$(NAME)
 BINDIR := /usr/bin
 ETCDIR := /etc
-TEMPLATES := centos_7 centos_8 centos_stream_8 sl_7 rocky_8 alma_8 \
-                               centos_stream_9      rocky_9 alma_9 \
+TEMPLATES := centos_7                 sl_7 rocky_8 alma_8 \
+                      centos_stream_9      rocky_9 alma_9 \
              gh_runner
 
 SHELL:=bash
