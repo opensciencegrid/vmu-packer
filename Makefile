@@ -6,8 +6,8 @@ NAME_VERSION := $(NAME)-$(VERSION)
 DATADIR := /usr/share/$(NAME)
 BINDIR := /usr/bin
 ETCDIR := /etc
-TEMPLATES := centos_7                 rocky_8 alma_8 \
-                      centos_stream_9 rocky_9 alma_9 \
+TEMPLATES :=                 rocky_8 alma_8 \
+             centos_stream_9 rocky_9 alma_9 \
              gh_runner
 
 SHELL:=bash
@@ -40,7 +40,7 @@ testsource:
 
 .PHONY: rpmbuild
 rpmbuild: testsource
-	osg-build rpmbuild -v --el7
+	osg-build rpmbuild -v --el9
 
 .PHONY: kojiscratch
 kojiscratch: testsource
