@@ -1,6 +1,6 @@
 Summary: Scripts for using packer for making VMU images
 Name: vmu-packer
-Version: 1.12.0
+Version: 1.13.0
 Release: 1%{?dist}
 License: Apache 2.0
 Source0: %{name}-%{version}.tar.gz
@@ -31,6 +31,9 @@ echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.js
 %dir /var/log/%{name}
 
 %changelog
+* Mon Jul 01 2024 Mátyás Selmeci <matyas@cs.wisc.edu> - 1.13.0-1
+- Remove SL 7 and CentOS 7 images: upstreams are gone
+
 * Wed Jun 05 2024 Mátyás Selmeci <matyas@cs.wisc.edu> - 1.12.0-1
 - Remove Centos 8 and Centos Stream 8 images: upstream is gone
 
