@@ -14,8 +14,8 @@ PACKER_CACHE_PARENT=/staging/osg-images/working
 TIMEOUT=7200  # should be greater than vmu-rebuild-one's TIMEOUT+KILL_TIMEOUT
 KILL_TIMEOUT=300
 
-# Comma-separated list of email address that will be notified if image creation fails.
-ADMIN_EMAIL_LIST="blin@cs.wisc.edu,matyas+cron@cs.wisc.edu"
+# List of email address that will be notified if image creation fails.
+ADMIN_EMAIL_LIST=(blin@cs.wisc.edu matyas+cron@cs.wisc.edu)
 
 
 
@@ -196,7 +196,7 @@ fi
 } >> "$mail"
 
 
-/bin/mail -s "$subject" $ADMIN_EMAIL_LIST < "$mail"
+/bin/mail -s "$subject" "${ADMIN_EMAIL_LIST[@]}" < "$mail"
 
 # Clean up "port" files if no packer processes are using them
 if ! pgrep -u root packer.io >/dev/null; then
