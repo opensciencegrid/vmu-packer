@@ -1,6 +1,6 @@
 Summary: Scripts for using packer for making VMU images
 Name: vmu-packer
-Version: 1.13.0
+Version: 1.14.0
 Release: 1%{?dist}
 License: Apache 2.0
 Source0: %{name}-%{version}.tar.gz
@@ -31,6 +31,10 @@ echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.js
 %dir /var/log/%{name}
 
 %changelog
+* Tue Dec 03 2024 Mátyás Selmeci <matyas@cs.wisc.edu> - 1.14.0-1
+- Update Alma 9 image
+- Clean up "port" files if we're done with them (i.e., we have no packer processes running)  (SOFTWARE-5910)
+
 * Mon Jul 01 2024 Mátyás Selmeci <matyas@cs.wisc.edu> - 1.13.0-1
 - Remove SL 7 and CentOS 7 images: upstreams are gone
 
