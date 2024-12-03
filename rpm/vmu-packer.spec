@@ -1,6 +1,6 @@
 Summary: Scripts for using packer for making VMU images
 Name: vmu-packer
-Version: 1.14.1
+Version: 1.14.2
 Release: 1%{?dist}
 License: Apache 2.0
 Source0: %{name}-%{version}.tar.gz
@@ -31,7 +31,7 @@ echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.js
 %dir /var/log/%{name}
 
 %changelog
-* Tue Dec 03 2024 Mátyás Selmeci <matyas@cs.wisc.edu> - 1.14.1-1
+* Tue Dec 03 2024 Mátyás Selmeci <matyas@cs.wisc.edu> - 1.14.2-1
 - Update images
 - Clean up "port" files if we're done with them (i.e., we have no packer processes running)  (SOFTWARE-5910)
 
