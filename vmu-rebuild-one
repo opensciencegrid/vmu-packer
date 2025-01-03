@@ -2,8 +2,8 @@
 
 
 PACKER=
-PASSWORD_FILE=/etc/vmu-packer/password.json
-DATA_DIR=/usr/share/vmu-packer
+PASSWORD_FILE=../password.json
+DATA_DIR=.
 
 TIMEOUT=6800
 KILL_TIMEOUT=300

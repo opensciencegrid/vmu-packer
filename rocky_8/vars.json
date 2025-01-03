@@ -1,5 +1,5 @@
 {
-    "iso_checksum" : "sha256:642ada8a49dbeca8cca6543b31196019ee3d649a0163b5db0e646c7409364eeb",
-    "iso_url"      : "https://download.rockylinux.org/pub/rocky/8/isos/x86_64/Rocky-8.10-x86_64-dvd1.iso",
+    "iso_checksum" : "sha256:fbc3d12b6bd4fadeb7aa11c133afc927a6df5414f3ce47d6093706a4ef86e0a8",
+    "iso_url"      : "https://download.rockylinux.org/pub/rocky/8/isos/aarch64/Rocky-8.10-aarch64-dvd1.iso",
     "kickstart"    : "rocky_8/kickstart.ks"
 }

@@ -37,8 +37,11 @@
             "net_device"        : "virtio-net",
             "output_directory"  : "{{ user `output_dir` }}",
             "qemuargs"          : [
-                ["-cpu", "{{ user `cpu` }}"]
-            ],
+                ["-cpu", "host"],
+                ["-boot", "strict=off"],
+                [ "-machine", "type=virt,accel=kvm" ]
+             ],
+            "qemu_binary"  : "/usr/bin/qemu-system-aarch64",
             "shutdown_command"  : "shutdown -P now",
             "ssh_password"      : "{{ user `password` }}",
             "ssh_timeout"       : "40m",
