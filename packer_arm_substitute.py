@@ -10,7 +10,6 @@
 # 3. Transfer files from the host to the guest in some way (not actually sure how packer does this, virtiofs is used here)
 # 4. Attempt to log into the guest, run configuration script based on transferred files
 
-
 import pexpect
 import json
 import requests
@@ -205,10 +204,12 @@ def get_pw(pw_file: Path) -> str:
 
 CMD = (
     "chmod +x /tmp/host-data/run-user-payload /tmp/host-data/osg-test.init && " 
-    "mv /tmp/host-data/run-user-payload /root/run-user-payload && "
-    "mv /tmp/host-data/osg-test.init /etc/osg-test.init && "
-    "mv /tmp/host-data/osg-test.service /etc/systemd/system/osg-test.service && "
+    "cp /tmp/host-data/run-user-payload /root/run-user-payload && "
+    "cp /tmp/host-data/osg-test.init /etc/osg-test.init && "
+    "cp /tmp/host-data/resolv.conf /etc/resolv.conf && "
+    "cp /tmp/host-data/osg-test.service /etc/systemd/system/osg-test.service && "
     "systemctl -q enable osg-test"
+
 )
 
 def main():
