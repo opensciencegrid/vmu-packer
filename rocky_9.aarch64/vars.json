@@ -1,0 +1,8 @@
+{
+    "cpu"          : "host",
+    "disk_size"    : "10000M",
+    "iso_checksum" : "sha256:0f5615bd293c04918931922ad19bac66e8e8b0affa253dca9531baee869917f1",
+    "iso_url"      : "https://download.rockylinux.org/pub/rocky/9/isos/aarch64/Rocky-9.5-aarch64-dvd.iso",
+    "kickstart"    : "rocky_9.aarch64/kickstart.ks"
+}
+

@@ -1,0 +1,8 @@
+{
+    "cpu"          : "host",
+    "disk_size"    : "10000M",
+    "iso_checksum" : "sha256:b697af3c8f18c8535d3c451b032008145b927ec161c188dd07b7a7f5e45e29d6",
+    "iso_url"      : "https://ord.mirror.rackspace.com/centos-stream/9-stream/BaseOS/aarch64/iso/CentOS-Stream-9-20240819.0-aarch64-dvd1.iso",
+    "kickstart"    : "centos_stream_9.aarch64/kickstart.ks"
+}
+
