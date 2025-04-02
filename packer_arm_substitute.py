@@ -7,8 +7,9 @@
 #    location
 # 2. Start an automated VM install using that iso as a base, passing in a 
 #    kickstart file via extra kernel args using libvirt
-# 3. Transfer files from the host to the guest in some way (not actually sure how packer does this, virtiofs is used here)
-# 4. Attempt to log into the guest, run configuration script based on transferred files
+# 3. Transfer a set of config files from the host into the guest via a volume mount
+# 4. Attempt to log into the guest, copy the files into the local image, and run several shell commands
+# 5. Optionally, transfer the resultant VM disk image from the libvirt storage pool to a location on disk
 
 import pexpect
 import json
@@ -16,8 +17,9 @@ import requests
 import hashlib
 from pathlib import Path
 import subprocess
-from sys import argv
 from time import sleep
+import argparse
+import random
 from datetime import datetime, timedelta
 
 # Attempt to cache things in a manner similar to packer
@@ -69,10 +71,13 @@ def launch_libvirt_build(iso_path: Path, kickstart_path: Path, storage_pool: str
     Start an in-the-background libvert automated build based on the supplied iso, kickstart file,
     and output disk image
     """
+    suffix = str(random.randint(1e5,1e6-1))
+    name = iso_path.name + '-' + suffix
     cmd = [
         'virt-install',
         '--network', 'network=host-bridge,model=virtio',
-        '--name', iso_path.name,
+#        '--network', 'default',
+        '--name', name,
         '--disk', f'pool={storage_pool},size={img_size}',
 #        '--disk', f'path=/var/lib/libvirt/images/{iso_path.name}.img,size={img_size},format=raw',
         '--boot', 'uefi',
@@ -84,7 +89,7 @@ def launch_libvirt_build(iso_path: Path, kickstart_path: Path, storage_pool: str
 
     subprocess.call(cmd)
 
-    return iso_path.name
+    return name
 
 def poll_libvirtd_progress(domain_name: str, sleep_interval: float = 5, timeout: float = 600):
     """
@@ -192,6 +197,31 @@ def configure_host_mount(domain_name: str, host_path: str):
     ]
     subprocess.call(virtiofs_cmd)
 
+
+def export_iso(export_path: Path, domain_name: str, pool: str):
+    '''
+    (Optionally) export an iso from the storage pool to a path on disk
+    '''
+    print(f"Exporting VM Volume {domain_name} from pool {pool} to export path {export_path}")
+    export_cmd = [
+        'virsh', 'vol-download', '--vol', domain_name, '--pool', pool, export_path
+    ]
+    subprocess.call(export_cmd)
+
+    print(f"Removing VM Volume {domain_name} from pool {pool}")
+    delete_cmd = [
+        'virsh', 'vol-delete', domain_name, pool
+    ]
+    subprocess.call(export_cmd)
+
+def undefine_vm(domain_name: str):
+    '''
+    Undefine a VM
+    '''
+    print("Undefining VM")
+    undefine_cmd = ['virsh', 'undefine', '--nvram', domain_name]
+    subprocess.call(undefine_cmd)
+
         
 def get_pw(pw_file: Path) -> str:
     '''
@@ -209,24 +239,47 @@ CMD = (
     "cp /tmp/host-data/resolv.conf /etc/resolv.conf && "
     "cp /tmp/host-data/osg-test.service /etc/systemd/system/osg-test.service && "
     "systemctl -q enable osg-test"
-
 )
 
 def main():
-    cache_path = Path(argv[1])
-    config_path = Path(argv[2])
-    storage_pool = argv[3]
-    password_file = Path(argv[4])
-    input_dir = Path(argv[5])
+    # Simple arg parser with a bunch of required arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-c','--config-path', required=True, help='Path to config file')
+    parser.add_argument('-i','--iso-path', required=True, help='Path at which to cache source ISO image')
+    parser.add_argument('-v','--host-path', required=True, help='Path on the host to volume-mount and copy into the VM post-setup')
+    parser.add_argument('-p','--password-file', required=True, help='Path to a JSON file containing a password for the VM user')
+    parser.add_argument('-s','--storage-pool', required=True, help='Storage pool to output complete disk image into')
+    parser.add_argument('-o','--output-path', help='Path on disk to export complete disk image onto')
+
+    args = parser.parse_args()
+
+    cache_path = Path(args.iso_path)
+    config_path = Path(args.config_path)
+    password_file = Path(args.password_file)
+    input_dir = Path(args.host_path)
+    storage_pool = args.storage_pool
+
+    # Download the iso
     iso_path = download_iso(cache_path, config_path / 'vars.json')
 
+    # Install a VM based on the iso via libvirt
     domain_name = launch_libvirt_build(iso_path, config_path / 'kickstart.ks', storage_pool)
     poll_libvirtd_progress(domain_name)
 
+    # Mount a host directory into the shut-down VM post setup
     configure_host_mount(domain_name, input_dir)
 
+    # Restart the VM, log into it using virsh console, then run the specified commands in it
     password = get_pw(password_file)
     pexpect_console_setup(domain_name, password, cmd=CMD)
+
+    # Clean up: remove the VM (the build artifact still exists in the storage pool)
+    undefine_vm(domain_name)
+
+    # If configured, 
+    if args.output_path:
+        export_iso(args.output_path, domain_name, storage_pool)
+
 
 if __name__ == '__main__':
     main()

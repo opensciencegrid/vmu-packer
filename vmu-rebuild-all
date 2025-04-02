@@ -17,6 +17,8 @@ KILL_TIMEOUT=300
 # List of email address that will be notified if image creation fails.
 ADMIN_EMAIL_LIST=(blin@cs.wisc.edu matyas+cron@cs.wisc.edu)
 
+arch=$(uname -i)
+
 
 
 
@@ -53,17 +55,17 @@ iecho () {
 
 
 dest_file_name () {
-    echo "$DEPLOY_DIR/${1}_x86_64_htcondor.dsk"
+    echo "$DEPLOY_DIR/${1}.${arch}_htcondor.dsk"
 }
 
 
 new_file_name () {
-    echo "$DEPLOY_DIR/new_${1}_x86_64_htcondor.dsk"
+    echo "$DEPLOY_DIR/new_${1}.${arch}_htcondor.dsk"
 }
 
 
 archive_name () {
-    echo "$DEPLOY_DIR/old_${1}_x86_64_htcondor.dsk${2}.gz"
+    echo "$DEPLOY_DIR/old_${1}.${arch}_htcondor.dsk${2}.gz"
 }
 
 
@@ -104,12 +106,13 @@ back_up_old_image () {
 
 generate_image () {
     template=$1
+    arch=$(uname -i)
     log_file=$(log_file_name "$template")
     output_file=$(new_file_name "$template")
 
     iecho ""
-    iecho "Starting vmu-rebuild-one $template; logs at $log_file"
-    ret=0; timeout -k "$KILL_TIMEOUT" "$TIMEOUT" vmu-rebuild-one "$template" "$output_file" >> "$log_file" 2>&1 || ret=$?
+    iecho "Starting vmu-rebuild-one $template.$arch; logs at $log_file"
+    ret=0; timeout -k "$KILL_TIMEOUT" "$TIMEOUT" vmu-rebuild-one "$template.$arch" "$output_file" >> "$log_file" 2>&1 || ret=$?
 
     if [[ $ret != 0 ]]; then
         iecho "vmu-rebuild-one failed with code $ret, see logs for details"

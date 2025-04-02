@@ -50,11 +50,17 @@ fi
 TEMPLATE=$1
 OUTPUT_FILE=$2
 
+ARCH=$(uname -i)
+
 input_dir=$DATA_DIR/$TEMPLATE
 files_path=$DATA_DIR/files
 vars=${input_dir}/vars.json
 http_directory=${input_dir}
 kickstart=kickstart.ks
+
+# TODO These are hardcoded to match the ARM host
+LIBVIRT_STORAGE_POOL=raid5_0
+LIBVIRT_ISO_CACHE=/var/lib/libvirt/isos/
 
 
 # Various checks for $DATA_DIR and $TEMPLATE
@@ -75,23 +81,30 @@ assert_readable_file "$vars"
 assert_readable_file "${http_directory}/${kickstart}"
 
 
-# Check for the packer binary.  The OS comes with a conflicting binary in
-# /usr/bin/packer so our RPM creates /usr/bin/packer.io instead (and optionally
-# a symlink /usr/local/bin/packer -> /usr/bin/packer.io).
+if [ "$ARCH" = "x86_64" ]; then 
+    # Check for the packer binary.  The OS comes with a conflicting binary in
+    # /usr/bin/packer so our RPM creates /usr/bin/packer.io instead (and optionally
+    # a symlink /usr/local/bin/packer -> /usr/bin/packer.io).
 
-if [[ ! $PACKER ]]; then
-    PACKER=$(command -v packer.io 2>/dev/null) || \
-        PACKER=$(command -v packer 2>/dev/null) || \
-        { fail "packer / packer.io not found.\n" \
-               "Put Hashicorp Packer in the PATH as 'packer' or 'packer.io'\n" \
-               "or specify the full path with $prog -x /path/to/packer.io"; }
-fi
+    if [[ ! $PACKER ]]; then
+        PACKER=$(command -v packer.io 2>/dev/null) || \
+            PACKER=$(command -v packer 2>/dev/null) || \
+            { fail "packer / packer.io not found.\n" \
+                "Put Hashicorp Packer in the PATH as 'packer' or 'packer.io'\n" \
+                "or specify the full path with $prog -x /path/to/packer.io"; }
+    fi
 
-owner=$(rpm -qf "$PACKER" 2>/dev/null)
-if [[ $owner = *cracklib* ]]; then
-    fail "Wrong packer -- $PACKER is the one from cracklib.\n" \
-         "Put Hashicorp Packer in the PATH as 'packer' or 'packer.io'\n" \
-         "or specify the full path with $prog -x /path/to/packer.io"
+    owner=$(rpm -qf "$PACKER" 2>/dev/null)
+    if [[ $owner = *cracklib* ]]; then
+        fail "Wrong packer -- $PACKER is the one from cracklib.\n" \
+            "Put Hashicorp Packer in the PATH as 'packer' or 'packer.io'\n" \
+            "or specify the full path with $prog -x /path/to/packer.io"
+    fi
+else 
+    # Check for the libvirt binaries
+    (command -v virsh && command -v virt-xml && command -v virt-install) || \
+        fail "Libvirt sub-commands not found. The following libvirt commands are required:\n" \
+             "virsh virt-xml virt-install"
 fi
 
 
@@ -116,17 +129,28 @@ trap 'rm -rf "$output_root"' EXIT
 export CHECKPOINT_DISABLE=1
 export PACKER_LOG=
 
-timeout -k "$KILL_TIMEOUT" "$TIMEOUT" \
-    "$PACKER" build --machine-readable --timestamp-ui --force \
-    --var-file "$vars" \
-    --var disk_image="$disk_image" \
-    --var files_path="$files_path" \
-    --var http_directory="$http_directory" \
-    --var kickstart="$kickstart" \
-    --var output_dir="$output_dir"  \
-    --var-file "$PASSWORD_FILE" \
-    \
-    "$DATA_DIR/packer-qemu.json"  || fail "Error creating image -- $PACKER exited with error code $?"
+if [ "$ARCH" = "x86_64" ]; then
+    timeout -k "$KILL_TIMEOUT" "$TIMEOUT" \
+        "$PACKER" build --machine-readable --timestamp-ui --force \
+        --var-file "$vars" \
+        --var disk_image="$disk_image" \
+        --var files_path="$files_path" \
+        --var http_directory="$http_directory" \
+        --var kickstart="$kickstart" \
+        --var output_dir="$output_dir"  \
+        --var-file "$PASSWORD_FILE" \
+        \
+        "$DATA_DIR/packer-qemu.json"  || fail "Error creating image -- $PACKER exited with error code $?"
+else
+    timeout -k "$KILL_TIMEOUT" "$TIMEOUT" \
+        python3 packer_arm_substitute.py \
+        --iso-path "$LIBVIRT_ISO_CACHE" \
+        --storage-pool "$LIBVIRT_STORAGE_POOL" \
+        --config-path  "$input_dir" \
+        --password-file "$PASSWORD_FILE" \
+        --host-path $files_path \
+        --output-path $output_dir/$disk_image
+fi
 
 mv -f "$output_dir/$disk_image" "$OUTPUT_FILE"  || { trap - EXIT; fail "Error moving output from $output_dir/$disk_image to $OUTPUT_FILE; leaving it there."; }
 
