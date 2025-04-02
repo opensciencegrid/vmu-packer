@@ -124,6 +124,7 @@ disk_image=new_image.dsk
 
 rm -rf "${output_root:?}/*"
 mkdir -p "$output_root"
+mkdir -p "$output_dir"
 trap 'rm -rf "$output_root"' EXIT
 
 export CHECKPOINT_DISABLE=1
@@ -148,7 +149,7 @@ else
         --storage-pool "$LIBVIRT_STORAGE_POOL" \
         --config-path  "$input_dir" \
         --password-file "$PASSWORD_FILE" \
-        --host-path $files_path \
+        --host-path $(realpath $files_path) \
         --output-path $output_dir/$disk_image
 fi
 
