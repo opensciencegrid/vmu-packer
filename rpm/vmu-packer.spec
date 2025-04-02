@@ -25,6 +25,7 @@ echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.js
 %files
 /usr/bin/vmu-rebuild-one
 /usr/bin/vmu-rebuild-all
+/usr/bin/packer_arm_substititute.py
 /usr/share/%{name}
 %attr(700,root,root) %dir /etc/%{name}
 %attr(600,root,root) %config(noreplace) /etc/%{name}/password.json

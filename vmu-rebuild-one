@@ -2,8 +2,8 @@
 
 
 PACKER=
-PASSWORD_FILE=../password.json
-DATA_DIR=.
+PASSWORD_FILE=/etc/vmu-packer/password.json
+DATA_DIR=/usr/share/vmu-packer
 
 TIMEOUT=6800
 KILL_TIMEOUT=300
@@ -144,7 +144,7 @@ if [ "$ARCH" = "x86_64" ]; then
         "$DATA_DIR/packer-qemu.json"  || fail "Error creating image -- $PACKER exited with error code $?"
 else
     timeout -k "$KILL_TIMEOUT" "$TIMEOUT" \
-        python3 packer_arm_substitute.py \
+        packer_arm_substitute.py \
         --iso-path "$LIBVIRT_ISO_CACHE" \
         --storage-pool "$LIBVIRT_STORAGE_POOL" \
         --config-path  "$input_dir" \
