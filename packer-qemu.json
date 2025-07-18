@@ -1,7 +1,7 @@
 {
     "variables": {
         "cpu"           : "qemu64",
-        "disk_size"     : "6500M",
+        "disk_size"     : "8000M",
         "disk_image"    : "image.dsk",
         "iso_checksum"  : "",
         "iso_url"       : "",
