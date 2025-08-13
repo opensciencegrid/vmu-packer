@@ -4,7 +4,9 @@ Version: 1.15.0
 Release: 1%{?dist}
 License: Apache 2.0
 Source0: %{name}-%{version}.tar.gz
-Requires: packer
+%ifarch x86_64
+Requires: packer-io
+%endif
 BuildArch: noarch
 %define _debuginfo_subpackages %{nil}
 
