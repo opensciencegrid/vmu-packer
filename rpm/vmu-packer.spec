@@ -1,6 +1,6 @@
 Summary: Scripts for using packer for making VMU images
 Name: vmu-packer
-Version: 1.15.0
+Version: 1.15.1
 Release: 1%{?dist}
 License: Apache 2.0
 Source0: %{name}-%{version}.tar.gz
@@ -34,8 +34,13 @@ echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.js
 %dir /var/log/%{name}
 
 %changelog
-* Tue Apr 02 2025 Matt Westphall <westphall@wisc.edu> - 1.15.0-1
+
+* Wed Aug 13 2025 Matt Westphall <westphall@wisc.edu> - 1.15.1-1
 - Add support for building on ARM (SOFTWARE-6039)
+
+* Fri Jul 18 2025 Mátyás Selmeci <mselmeci@wisc.edu> - 1.15.0-1
+- Stop building gh_runner image -- unused
+- Increase default disk size (for EL8) by 1500 MB
 
 * Tue Dec 03 2024 Mátyás Selmeci <matyas@cs.wisc.edu> - 1.14.2-1
 - Update images
