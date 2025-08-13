@@ -1,10 +1,12 @@
 Summary: Scripts for using packer for making VMU images
 Name: vmu-packer
-Version: 1.15.0
+Version: 1.15.1
 Release: 1%{?dist}
 License: Apache 2.0
 Source0: %{name}-%{version}.tar.gz
+%ifarch x86_64
 Requires: packer-io
+%endif
 BuildArch: noarch
 %define _debuginfo_subpackages %{nil}
 
@@ -25,12 +27,17 @@ echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.js
 %files
 /usr/bin/vmu-rebuild-one
 /usr/bin/vmu-rebuild-all
+/usr/bin/packer_arm_substitute.py
 /usr/share/%{name}
 %attr(700,root,root) %dir /etc/%{name}
 %attr(600,root,root) %config(noreplace) /etc/%{name}/password.json
 %dir /var/log/%{name}
 
 %changelog
+
+* Wed Aug 13 2025 Matt Westphall <westphall@wisc.edu> - 1.15.1-1
+- Add support for building on ARM (SOFTWARE-6039)
+
 * Fri Jul 18 2025 Mátyás Selmeci <mselmeci@wisc.edu> - 1.15.0-1
 - Stop building gh_runner image -- unused
 - Increase default disk size (for EL8) by 1500 MB

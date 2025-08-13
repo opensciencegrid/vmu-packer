@@ -20,7 +20,7 @@ install: install-bin install-data
 .PHONY: install-bin
 install-bin:
 	mkdir -p $(DESTDIR)$(BINDIR)
-	install -D -p -m 755 vmu-rebuild-one vmu-rebuild-all $(DESTDIR)$(BINDIR)
+	install -D -p -m 755 vmu-rebuild-one vmu-rebuild-all packer_arm_substitute.py $(DESTDIR)$(BINDIR)
 
 
 .PHONY: install-data

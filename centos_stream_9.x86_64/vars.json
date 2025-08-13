@@ -3,5 +3,5 @@
     "disk_size"    : "10000M",
     "iso_checksum" : "sha256:794b52309f5e8cd58b9b4f0d0994fc2bdcf3169537dc4a5637465b7719ba23ec",
     "iso_url"      : "https://ord.mirror.rackspace.com/centos-stream/9-stream/BaseOS/x86_64/iso/CentOS-Stream-9-20240819.0-x86_64-dvd1.iso",
-    "kickstart"    : "centos_stream_9/kickstart.ks"
+    "kickstart"    : "centos_stream_9.x86_64/kickstart.ks"
 }
