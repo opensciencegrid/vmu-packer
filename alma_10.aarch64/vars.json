@@ -1,0 +1,7 @@
+{
+    "cpu"          : "host",
+    "disk_size"    : "10000M",
+    "iso_checksum" : "sha256:ae539b6d86324e7061c4f9b577d59aee7eabcb565c2a3339b6954945e7ced040",
+    "iso_url"      : "https://ord.mirror.rackspace.com/almalinux/10.0/isos/aarch64/AlmaLinux-10.0-aarch64-dvd.iso",
+    "kickstart"    : "alma_10.aarch64/kickstart.ks"
+}
