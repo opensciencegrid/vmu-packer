@@ -44,3 +44,4 @@ date > /etc/creation_date
 mkdir /mnt/user
 echo >> /etc/ssh/sshd_config
 echo PermitRootLogin yes >> /etc/ssh/sshd_config
+%end
