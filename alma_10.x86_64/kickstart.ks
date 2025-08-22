@@ -26,7 +26,7 @@ zerombr
 at
 bzip2
 findutils
-git-core
+git
 gzip
 make
 policycoreutils-python-utils

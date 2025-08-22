@@ -1,5 +1,7 @@
 {
     "iso_checksum" : "sha256:463fa92155b886e31627f6713e1c2824343762245a914715ffd6f2efc300b7a1",
     "iso_url"      : "https://mirror.grid.uchicago.edu/pub/linux/alma/8.10/isos/x86_64/AlmaLinux-8.10-x86_64-dvd.iso",
-    "kickstart"    : "alma_8.x86_64/kickstart.ks"
+    "kickstart"    : "alma_8.x86_64/kickstart.ks",
+    "boot_start"   : "<up><wait><tab>",
+    "boot_end"     : "<enter><wait>"
 }
