@@ -1,7 +1,7 @@
 Summary: Scripts for using packer for making VMU images
 Name: vmu-packer
 Version: 1.15.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: Apache 2.0
 Source0: %{name}-%{version}.tar.gz
 %ifarch x86_64
@@ -34,6 +34,9 @@ echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.js
 %dir /var/log/%{name}
 
 %changelog
+
+* Mon Aug 25 2025 Matt Westphall <westphall@wisc.edu> - 1.15.3-2
+- Fix Makefile
 
 * Mon Aug 25 2025 Matt Westphall <westphall@wisc.edu> - 1.15.3-1
 - Update Alma/RockyLinux 9 templates to 9.6 (SOFTWARE-6209)
