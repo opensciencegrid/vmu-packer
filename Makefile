@@ -27,7 +27,7 @@ install-bin:
 install-data:
 	mkdir -p $(DESTDIR)$(DATADIR)
 	install -p -m 644 packer-qemu.json $(DESTDIR)$(DATADIR)/packer-qemu.json
-	for tmpl in $(TEMPLATES) files; do \
+	for tmpl in $$(find . -name 'kickstart.ks' | cut -d '/' -f 2) files; do \
 		mkdir -p $(DESTDIR)$(DATADIR)/$$tmpl; \
 		install -p -m 644 $$tmpl/* $(DESTDIR)$(DATADIR)/$$tmpl; \
 	done
