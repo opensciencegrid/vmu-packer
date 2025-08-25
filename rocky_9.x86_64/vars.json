@@ -1,7 +1,7 @@
 {
     "cpu"          : "host",
     "disk_size"    : "10000M",
-    "iso_checksum" : "sha256:ba60c3653640b5747610ddfb4d09520529bef2d1d83c1feb86b0c84dff31e04e",
-    "iso_url"      : "https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.5-x86_64-dvd.iso",
+    "iso_checksum" : "sha256:8ff2a47e2f3bfe442617fceb7ef289b7b1d2d0502089dbbd505d5368b2b3a90f",
+    "iso_url"      : "https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.6-x86_64-dvd.iso",
     "kickstart"    : "rocky_9.x86_64/kickstart.ks"
 }
