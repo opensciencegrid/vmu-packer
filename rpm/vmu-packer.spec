@@ -1,6 +1,6 @@
 Summary: Scripts for using packer for making VMU images
 Name: vmu-packer
-Version: 1.15.1
+Version: 1.15.2
 Release: 1%{?dist}
 License: Apache 2.0
 Source0: %{name}-%{version}.tar.gz
@@ -34,6 +34,9 @@ echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.js
 %dir /var/log/%{name}
 
 %changelog
+
+* Wed Aug 13 2025 Matt Westphall <westphall@wisc.edu> - 1.15.2-1
+- Don't send error email on missing ARM templates (SOFTWARE-6208)
 
 * Wed Aug 13 2025 Matt Westphall <westphall@wisc.edu> - 1.15.1-1
 - Add support for building on ARM (SOFTWARE-6039)
