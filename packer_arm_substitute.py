@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 # Python script that roughly mimics the workings of packer on ARM,
 # where it is not well supported
