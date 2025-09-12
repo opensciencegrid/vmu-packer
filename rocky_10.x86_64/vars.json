@@ -1,0 +1,10 @@
+{
+    "cpu"          : "host",
+    "disk_size"    : "10000M",
+    "iso_checksum" : "sha256:678ea3e1eea6f5d6c220c46fab34f5e0add260e7b64f0139ee3b9f7b7ca7d2f3",
+    "iso_url"      : "https://download.rockylinux.org/pub/rocky/10/isos/x86_64/Rocky-10.0-x86_64-dvd1.iso",
+    "kickstart"    : "rocky_10.x86_64/kickstart.ks",
+    "boot_start"   : "<wait><up><wait>e<down><down><end>",
+    "boot_end"     : "<leftCtrlOn>x<leftCtrlOff>"
+}
+

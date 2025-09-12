@@ -1,0 +1,10 @@
+{
+    "cpu"          : "host",
+    "disk_size"    : "10000M",
+    "iso_checksum" : "sha256:488150ba8cc0c5e938d5242351a11e08e40be208e5d119ac2ac519b67f5b8711",
+    "iso_url"      : "https://ord.mirror.rackspace.com/centos-stream/10-stream/BaseOS/x86_64/iso/CentOS-Stream-10-20250908.0-x86_64-dvd1.iso",
+    "kickstart"    : "centos_stream_10.x86_64/kickstart.ks",
+    "boot_start"   : "<wait><up><wait>e<down><down><end>",
+    "boot_end"     : "<leftCtrlOn>x<leftCtrlOff>"
+}
+
