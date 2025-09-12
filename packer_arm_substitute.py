@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 
 # Python script that roughly mimics the workings of packer on ARM,
 # where it is not well supported
@@ -84,6 +84,8 @@ def launch_libvirt_build(iso_path: Path, kickstart_path: Path, storage_pool: str
         '--initrd-inject', kickstart_path,
         f'--extra-args="inst.ks=file:/{kickstart_path.name}"',
         '--noautoconsole',
+        '--osinfo', 'detect=on,require=off',
+        '--memory', '4096',
         '--location', iso_path
     ]
 
