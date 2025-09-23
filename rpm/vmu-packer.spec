@@ -1,6 +1,6 @@
 Summary: Scripts for using packer for making VMU images
 Name: vmu-packer
-Version: 1.16.0
+Version: 1.16.1
 Release: 1%{?dist}
 License: Apache 2.0
 Source0: %{name}-%{version}.tar.gz
@@ -34,6 +34,9 @@ echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.js
 %dir /var/log/%{name}
 
 %changelog
+* Tue Sep 23 2025 Mátyás Selmeci <mselmeci@wisc.edu> - 1.16.1-1
+- alma_10.x86_64, rocky_10.x86_64: install git-core instead of git for consistency
+- run-user-payload: check that the destination is mounted before writing logs there
 
 * Mon Aug 25 2025 Matt Westphall <westphall@wisc.edu> - 1.16.0-1
 - Add EL10 build configs (SOFTWARE-6402)
