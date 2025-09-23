@@ -1,4 +1,27 @@
-#!/bin/sh
+#!/bin/bash
+
+
+testlog=/mnt/user/run-job.log
+
+
+checkmount () {
+    # Check that the output filesystem is mounted and writeable
+    findmnt /mnt/user >/dev/null && touch "${testlog}"
+}
+
+
+tries=10
+until checkmount
+do
+    (( tries-- ))
+    if (( tries < 0 ))
+    then
+        echo >&2 "WARNING: /mnt/user never got mounted"
+        break  # let's try our best anyway
+    else
+        sleep 2
+    fi
+done
 
 # Run job with clean environment
 /bin/env - \
@@ -6,7 +29,7 @@
     USER=root \
     PWD=/ \
     LANG=en_US.UTF-8 \
-    /mnt/user/run-job >> /mnt/user/run-job.log 2>&1
+    /mnt/user/run-job 2>&1 | tee "${testlog}"
 
 # Shutdown
 [ -f /dont-power-off ] || /sbin/poweroff
