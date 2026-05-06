@@ -38,6 +38,9 @@ echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.js
 - alma_10.x86_64, rocky_10.x86_64: install git-core instead of git for consistency
 - run-user-payload: check that the destination is mounted before writing logs there
 
+* Wed May 06 2026 Matt Westphall <westphall@wisc.edu> - 1.16.1-1
+- Fix EL9 configs, update EL10 configs to 10.1 (SOFTWARE-6279)
+
 * Mon Aug 25 2025 Matt Westphall <westphall@wisc.edu> - 1.16.0-1
 - Add EL10 build configs (SOFTWARE-6402)
 
