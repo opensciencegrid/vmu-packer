@@ -1,7 +1,7 @@
 {
     "cpu"          : "host",
     "disk_size"    : "10000M",
-    "iso_checksum" : "sha256:3a93ec0313603a59688f3de3ebd18589daceaafd2295c5df43b8d2fd64aca807",
-    "iso_url"      : "https://download.rockylinux.org/pub/rocky/10/isos/aarch64/Rocky-10.1-aarch64-dvd1.iso",
+    "iso_checksum" : "sha256:3b8253987604df1bc5e1c33c838ff3ee9ce4a8f02ed9e27e300ecff58c0c9588",
+    "iso_url"      : "https://download.rockylinux.org/pub/rocky/10/isos/aarch64/Rocky-10.2-aarch64-dvd1.iso",
     "kickstart"    : "rocky_10.aarch64/kickstart.ks"
 }
