@@ -1,6 +1,6 @@
 Summary: Scripts for using packer for making VMU images
 Name: vmu-packer
-Version: 1.16.3
+Version: 1.16.4
 Release: 1%{?dist}
 License: Apache 2.0
 Source0: %{name}-%{version}.tar.gz
@@ -34,6 +34,12 @@ echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.js
 %dir /var/log/%{name}
 
 %changelog
+* Tue Jul 08 2026 Matt Westphall <westphall@wisc.edu> - 1.16.4-1
+- Update EL10 images to latest
+    - AlmaLinux 10 to 10.2
+    - Rocky 10 to 10.2
+    - CentOS Stream 10 to 20260707.1
+    
 * Mon Jun 15 2026 Mátyás Selmeci <mselmeci@wisc.edu> - 1.16.3-1
 - Update EL9 images to latest
     - AlmaLinux 9 to 9.8
