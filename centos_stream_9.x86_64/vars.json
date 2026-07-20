@@ -1,8 +1,8 @@
 {
     "cpu"          : "host",
     "disk_size"    : "10000M",
-    "iso_checksum" : "sha256:ef01e004c779e501d1502db1d798561c6336e87d5d6f7be148e8daa10abd2402",
-    "iso_url"      : "https://ord.mirror.rackspace.com/centos-stream/9-stream/BaseOS/x86_64/iso/CentOS-Stream-9-20260611.1-x86_64-dvd1.iso",
+    "iso_checksum" : "sha256:31c2627e27f793790aa0ac05b92ca9eb296a782851664f8d6ef2baabc679f688",
+    "iso_url"      : "https://ord.mirror.rackspace.com/centos-stream/9-stream/BaseOS/x86_64/iso/CentOS-Stream-9-20260714.1-x86_64-dvd1.iso",
     "kickstart"    : "centos_stream_9.x86_64/kickstart.ks",
     "boot_start"   : "<up><wait><tab>",
     "boot_end"     : "<enter><wait>"
