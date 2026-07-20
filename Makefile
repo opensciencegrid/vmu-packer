@@ -6,18 +6,26 @@ NAME_VERSION := $(NAME)-$(VERSION)
 DATADIR := /usr/share/$(NAME)
 BINDIR := /usr/bin
 ETCDIR := /etc
+UNITDIR := /usr/lib/systemd/system
 
 SHELL:=bash
 
 
 .PHONY: install
-install: install-bin install-data
+install: install-bin install-data install-systemd
 
 
 .PHONY: install-bin
 install-bin:
 	mkdir -p $(DESTDIR)$(BINDIR)
-	install -D -p -m 755 vmu-rebuild-one vmu-rebuild-all packer_arm_substitute.py $(DESTDIR)$(BINDIR)
+	install -D -p -m 755 vmu-rebuild-one vmu-rebuild-all packer_arm_substitute.py vmu-packer-update $(DESTDIR)$(BINDIR)
+
+
+.PHONY: install-systemd
+install-systemd:
+	mkdir -p $(DESTDIR)$(UNITDIR)
+	install -p -m 644 systemd/vmu-packer-update.service systemd/vmu-packer-update.timer $(DESTDIR)$(UNITDIR)
+	install -p -m 644 systemd/vmu-packer.service systemd/vmu-packer.timer $(DESTDIR)$(UNITDIR)
 
 
 .PHONY: install-data

@@ -1,0 +1,11 @@
+[Unit]
+Description=VMU Rebuild All
+After=network.target
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/usr/bin/vmu-rebuild-all
+
+[Install]
+WantedBy=multi-user.target

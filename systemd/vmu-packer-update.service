@@ -1,0 +1,8 @@
+[Unit]
+Description=Update vmu-packer templates from upstream git repository
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/vmu-packer-update

@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -o pipefail
+set -o nounset
+
+REPO_URL=https://github.com/opensciencegrid/vmu-packer.git
+LOG_DIR=/var/log/vmu-packer
+LOG_FILE=$LOG_DIR/vmu-packer-update.log
+
+prog=${0##*/}
+
+fail () {
+    echo "$prog:" "$@" >&2
+    exit 1
+}
+
+[[ $(id -u) -eq 0 ]] || fail "Please run this script as root."
+
+mkdir -p "$LOG_DIR"
+
+workdir=$(mktemp -d)
+
+{
+    echo "$(date '+%F %T'): Updating /usr/share/vmu-packer from $REPO_URL"
+
+    git clone --depth 1 --quiet "$REPO_URL" "$workdir" \
+        || fail "Failed to clone $REPO_URL"
+
+    make -C "$workdir" install-data \
+        || fail "Failed to install updated templates from $workdir"
+
+    echo "$(date '+%F %T'): Update complete"
+} >> "$LOG_FILE" 2>&1
