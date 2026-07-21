@@ -1,0 +1,10 @@
+[Unit]
+Description=Run vmu-rebuild-all at 01:30 on Sunday
+
+[Timer]
+# Run 30 minutes into a new week
+OnCalendar=Sun *-*-* 00:30:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

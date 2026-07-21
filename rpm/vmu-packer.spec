@@ -1,12 +1,16 @@
 Summary: Scripts for using packer for making VMU images
 Name: vmu-packer
-Version: 1.16.4
+Version: 1.17.0
 Release: 1%{?dist}
 License: Apache 2.0
 Source0: %{name}-%{version}.tar.gz
 %ifarch x86_64
 Requires: packer-io
 %endif
+Requires: git
+Requires: make
+BuildRequires: systemd-rpm-macros
+%{?systemd_requires}
 BuildArch: noarch
 %define _debuginfo_subpackages %{nil}
 
@@ -24,16 +28,42 @@ make install DESTDIR=%{buildroot}
 mkdir -p %{buildroot}/var/log/%{name}
 echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.json
 
+%post
+%systemd_post vmu-packer-update.timer
+%systemd_post vmu-packer.timer
+
+%preun
+%systemd_preun vmu-packer-update.timer
+%systemd_preun vmu-packer.timer
+
+%postun
+%systemd_postun_with_restart vmu-packer-update.timer
+%systemd_postun_with_restart vmu-packer.timer
+
 %files
 /usr/bin/vmu-rebuild-one
 /usr/bin/vmu-rebuild-all
 /usr/bin/packer_arm_substitute.py
-/usr/share/%{name}
+/usr/bin/vmu-packer-update
+%{_unitdir}/vmu-packer-update.service
+%{_unitdir}/vmu-packer-update.timer
+%{_unitdir}/vmu-packer.service
+%{_unitdir}/vmu-packer.timer
+%dir /usr/share/%{name}
+/usr/share/%{name}/packer-qemu.json
+/usr/share/%{name}/files
+%config(noreplace) /usr/share/%{name}/*.x86_64
+%config(noreplace) /usr/share/%{name}/*.aarch64
 %attr(700,root,root) %dir /etc/%{name}
 %attr(600,root,root) %config(noreplace) /etc/%{name}/password.json
 %dir /var/log/%{name}
 
 %changelog
+* Mon Jul 20 2026 Matt Westphall <westphall@wisc.edu> - 1.17.0-1
+- Preserve locally modified per-arch template files (kickstart.ks, vars.json) on upgrade via %config(noreplace)
+- Add vmu-packer-update.timer, a systemd timer that daily at midnight refreshes /usr/share/vmu-packer/ from the upstream git repository
+- Add vmu-packer.timer, a systemd timer that runs vmu-rebuild-all once per week
+
 * Tue Jul 08 2026 Matt Westphall <westphall@wisc.edu> - 1.16.4-1
 - Update EL10 images to latest
     - AlmaLinux 10 to 10.2
