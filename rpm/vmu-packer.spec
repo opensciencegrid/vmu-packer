@@ -1,6 +1,6 @@
 Summary: Scripts for using packer for making VMU images
 Name: vmu-packer
-Version: 1.16.5
+Version: 1.17.0
 Release: 1%{?dist}
 License: Apache 2.0
 Source0: %{name}-%{version}.tar.gz
