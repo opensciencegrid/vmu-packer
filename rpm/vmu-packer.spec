@@ -59,7 +59,7 @@ echo '{"password":"ENTER PASSWORD HERE"}' > %{buildroot}/etc/%{name}/password.js
 %dir /var/log/%{name}
 
 %changelog
-* Mon Jul 20 2026 Matt Westphall <westphall@wisc.edu> - 1.16.5-1
+* Mon Jul 20 2026 Matt Westphall <westphall@wisc.edu> - 1.17.0-1
 - Preserve locally modified per-arch template files (kickstart.ks, vars.json) on upgrade via %config(noreplace)
 - Add vmu-packer-update.timer, a systemd timer that daily at midnight refreshes /usr/share/vmu-packer/ from the upstream git repository
 - Add vmu-packer.timer, a systemd timer that runs vmu-rebuild-all once per week
