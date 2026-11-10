@@ -17,7 +17,7 @@ TIMEOUT=7200  # should be greater than vmu-rebuild-one's TIMEOUT+KILL_TIMEOUT
 KILL_TIMEOUT=300
 
 # List of email address that will be notified if image creation fails.
-ADMIN_EMAIL_LIST=(blin@cs.wisc.edu matyas+cron@cs.wisc.edu)
+ADMIN_EMAIL_LIST=(blin@cs.wisc.edu matyas+cron@cs.wisc.edu westphall@wisc.edu)
 
 arch=$(uname -i)
 
